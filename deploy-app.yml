@@ -1,0 +1,11 @@
+---
+## Deploy the web application
+- name: Deploy web application
+  hosts: app-servers
+  serial: 1
+  vars_files: 
+    - [ "vars/default.yml" ]
+    - [ "vars/{{ env }}-config.yml" ]
+   
+  roles: 
+    - { role: 'app', tags: [ 'app' ] }

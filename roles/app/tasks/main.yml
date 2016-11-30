@@ -1,0 +1,67 @@
+---
+# Deploy the app!
+- name: stop any running apps with pm2
+  command: pm2 stop {{ app_name }}
+  ignore_errors: yes
+  no_log: yes
+  tags:
+    - pm2-stop
+
+- name: clean up client directory
+  file: path={{ deploy_app_dir }}/client state=absent
+
+- name: clean up server directory
+  file: path={{ deploy_app_dir }}/server state=absent
+
+- name: create {{ deploy_app_dir }} directory
+  file: path={{ deploy_app_dir }} state=directory mode=0755
+
+- name: create {{ deploy_log_dir }} directory
+  file: path={{ deploy_log_dir }} state=directory mode=0755
+
+- name: transfer app using rsync
+  synchronize: 
+    src: ../dist/prod/ 
+    dest: "{{ deploy_app_dir }}"
+    rsync_opts:
+      - "--exclude=node_modules"
+  tags:
+    - transfer-rsync
+
+- name: npm install can take awhile. hang tight!
+  environment: "{{ APP_ENVIRONMENT }}"
+  command: npm install --production --ignore-scripts
+  args:
+    chdir: "{{ deploy_app_dir }}"
+  ignore_errors: yes
+  no_log: yes
+  tags:
+    - npm-install
+
+- name: gracefully reload app with pm2 on port {{ nodejs_app_port }}
+  environment: "{{ APP_ENVIRONMENT }}"
+  command: pm2 gracefulReload {{ deploy_app_dir }}/{{ deploy_app_executable }} 
+           --log-date-format="YYYY-MM-DD HH:mm Z"
+           -n {{ app_name }} 
+           -l {{ deploy_log_dir }}/pm2-combined.log 
+           -o {{ deploy_log_dir }}/pm2-out.log
+           -e {{ deploy_log_dir }}/pm2-error.log
+           -p {{ deploy_dir }}/pm2-{{ app_name }}.pid
+  register: pm2_result
+  ignore_errors: yes
+  no_log: yes
+  tags:
+    - pm2-gracefulReload
+
+- name: start app with pm2 on port {{ nodejs_app_port }}
+  environment: "{{ APP_ENVIRONMENT }}"
+  command: pm2 start {{ deploy_app_dir }}/{{ deploy_app_executable }} 
+           --log-date-format="YYYY-MM-DD HH:mm Z"
+           -n {{ app_name }} 
+           -l {{ deploy_log_dir }}/pm2-combined.log 
+           -o {{ deploy_log_dir }}/pm2-out.log
+           -e {{ deploy_log_dir }}/pm2-error.log
+           -p {{ deploy_dir }}/pm2-{{ app_name }}.pid
+  when: pm2_result|failed
+  tags:
+    - pm2-start

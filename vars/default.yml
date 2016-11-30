@@ -1,0 +1,47 @@
+---
+## Default vars and config
+
+# Replace repo_url with actual repo of app
+repo_url: git@github.com:tommytomatoe/ansible-playbooks.git
+
+# Set the branch for deployment
+repo_version: master
+
+# Set name of app 
+app_name: ansible-playbooks
+
+# Set user name for server provisioning - a new user will be created with this name 
+user_name: "{{ app_name }}"
+
+# Set name of server 
+server_name: rcd.cool
+
+# Set directory for app deployment 
+deploy_dir: "/home/{{ user_name }}/{{ app_name }}"
+deploy_app_dir: "/home/{{ user_name }}/{{ app_name }}/{{ app_name }}-app" 
+
+# Set name of file or script for execution. ie. a bundled JS file for node.js 
+deploy_app_executable: "app.js"
+
+# Set log directory 
+deploy_log_dir: "{{ deploy_dir }}/logs"
+
+# Set backup directory for database 
+db_backup_dir: "{{ deploy_dir }}/db-backups"
+
+# Set new ssh port - default port of 22 will be replaced 
+ssh_port: 2202
+ssh_config_file: "/etc/ssh/sshd_config"
+
+# Example configuration setting the port number for a nodejs app: 
+nodejs_app_port: 9000
+
+# List of packages to be installed when provisioning a new webserver. Below are some examples: 
+webserver_packages_list: 
+  - apache2
+  - git
+  - nodejs
+  - npm
+  - imagemagick
+  - tiger
+  

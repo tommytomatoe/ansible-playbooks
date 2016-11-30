@@ -1,0 +1,7 @@
+---
+# Vars for apache setup
+apache_document_root: /var/www/{{ app_name }}
+apache_default_conf: 000-default.conf
+apache_modules_list: 
+  - proxy
+  - proxy_http 

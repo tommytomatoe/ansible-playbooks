@@ -1,0 +1,34 @@
+---
+# Configure and install Apache
+- name: state {{ apache_default_conf }}
+  stat: path=/etc/apache2/sites-enabled/{{ apache_default_conf }}
+  register: st_conf
+
+- name: disable default vhost {{ apache_default_conf }}
+  command: a2dissite {{ apache_default_conf }}
+  when: st_conf.stat.exists == true
+  become: true
+
+- name: enable apache mods
+  command: a2enmod {{ item }}
+  with_items: "{{ apache_modules_list }}"
+  become: true
+
+- name: copy {{ app_name }} vhost
+  template: src=vhost.conf.j2 dest=/etc/apache2/sites-available/{{ app_name }}.conf     
+  become: true 
+  notify: restart apache
+
+- name: enable new vhost
+  command: a2ensite {{ app_name }}.conf
+  become: true
+  notify: restart apache
+
+- name: create document root directory
+  file: path={{ apache_document_root }} state=directory mode=0755
+  become: true
+
+- name: copy template index.html
+  template: src=index.html.j2 dest={{ apache_document_root }}/index.html mode=0644
+  become: true
+  notify: restart apache

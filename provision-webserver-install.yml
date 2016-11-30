@@ -1,0 +1,14 @@
+---
+## Provision web server for web application
+- name: install and configure packages
+  hosts: app-servers
+  remote_user: "{{ user_name }}"
+  vars_files: 
+    - ["vars/default.yml"]
+  vars:
+    - ansible_port: "{{ ssh_port }}"
+ 
+  roles: 
+    - { role: webserver, tags: [ 'webserver' ] }
+    - { role: apache, tags: [ 'apache' ] }
+    - { role: nodejs, tags: [ 'nodejs'] }

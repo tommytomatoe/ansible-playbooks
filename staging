@@ -1,0 +1,11 @@
+[app-servers]
+# use a hostname or IP address
+staging-01.rcd.cool ansible_port=2202
+
+[mongo-servers]
+# use a hostname or IP address
+staging-01.rcd.cool
+
+[all:vars]
+# Sets the environment to staging (staging) or production (prod)
+env=staging

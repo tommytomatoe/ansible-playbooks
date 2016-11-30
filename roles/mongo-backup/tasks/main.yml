@@ -1,0 +1,8 @@
+---
+# Backup mongo
+- name: create {{ db_backup_dir }} directory
+  file: path={{ db_backup_dir }} state=directory mode=0755
+
+- name: backup mongo db using mongodump
+  environment: "{{ APP_ENVIRONMENT }}"
+  shell:  mongodump --db $DB_NAME -u $DB_USER -p "$DB_PASS" --gzip --archive={{ db_backup_dir }}/backup_`date "+%Y-%m-%d-%H-%M-%S"`.archive

@@ -1,0 +1,10 @@
+---
+## Backup mongo server
+- name: Backup mongo server
+  hosts: mongo-servers
+  vars_files: 
+    - [ "vars/default.yml" ]
+    - [ "vars/{{ env }}-config.yml" ]
+   
+  roles: 
+    - { role: 'mongo-backup', tags: [ 'mongo-backup' ] }

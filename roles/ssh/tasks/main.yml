@@ -1,0 +1,26 @@
+---
+# Harden SSH Protocol
+- name: change port
+  lineinfile: 
+    dest: "{{ ssh_config_file }}"
+    regexp: "^Port"
+    line: "Port {{ ssh_port }}"
+    state: present
+
+- name: disable password authentication over ssh
+  lineinfile:
+    dest: "{{ ssh_config_file }}"
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    state: present
+
+- name: disable root login over ssh
+  lineinfile:
+    dest: "{{ ssh_config_file }}"
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+
+# Restart ssh
+- name: restart ssh
+  service: name=ssh state=restarted

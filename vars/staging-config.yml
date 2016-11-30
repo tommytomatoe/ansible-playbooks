@@ -1,0 +1,9 @@
+---
+## Staging secrets
+
+APP_ENVIRONMENT:
+  SECRET_TOKEN: "1234567890abc"
+  ANOTHER_TOKEN: "cba0987654321"
+  DB_NAME: "staging_db"
+  DB_USER: "rcd"
+  DB_PASS: "1234567890abc"

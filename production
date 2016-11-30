@@ -1,0 +1,13 @@
+[app-servers]
+# use a hostname or IP address
+# list as many hosts as you want
+prod-01.rcd.cool
+prod-02.rcd.cool
+prod-03.rcd.cool 
+
+[mongo-servers]
+mongo-01.rcd.cool 
+
+[all:vars]
+# Sets the environment to staging (staging) or production (prod)
+env=prod

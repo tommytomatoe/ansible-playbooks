@@ -1,0 +1,19 @@
+---
+## Provision web server for web application
+# Create user first as root
+- name: bootstrap server as root
+  hosts: app-servers
+  remote_user: root
+  vars_files: 
+    - ["vars/default.yml"]
+  vars:
+    - ansible_port: 22
+
+  gather_facts: no
+  pre_tasks:
+    - name: sanity check for python and install if needed
+      raw: test -e /usr/bin/python || (sudo apt -y update && sudo apt install -y python-minimal)
+
+  roles: 
+    - { role: users, tags: [ 'users' ] }
+    - { role: ssh, tags: [ 'ssh' ] }

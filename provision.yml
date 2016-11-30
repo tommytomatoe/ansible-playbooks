@@ -1,0 +1,5 @@
+---
+## The master playbook for provisioning new webservers
+
+- include: provision-webserver-init.yml
+- include: provision-webserver-install.yml

@@ -1,0 +1,29 @@
+---
+# User creation role
+- name: create the {{ user_name }} user
+  user: >
+    name="{{ user_name }}"
+    state=present
+    shell=/bin/bash
+    groups=sudo
+    append=yes
+      
+# DigitalOcean
+# The 'root' authorized_keys can be copied to the app user folder
+# If deploying to different platform, set up SSH differently
+- name: set up .ssh directory
+  file: path=/home/{{ user_name }}/.ssh state=directory owner="{{ user_name }}" group="{{ user_name }}" mode=0700
+- name: copy authorized_keys
+  copy: remote_src=True src=/root/.ssh/authorized_keys dest=/home/{{ user_name }}/.ssh/authorized_keys
+  ignore_errors: yes
+- name: fix permissions
+  file: path=/home/{{ user_name }}/.ssh/authorized_keys owner=plate group=plate mode=0600
+
+- name: create ssh key
+  user: name={{ user_name }} generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa
+  tags: 
+    - users-ssh-keygen
+
+- name: set up sudoers
+  template: src=user_sudoer dest=/etc/sudoers.d/{{ user_name }}_sudoer mode=0440     
+  become: true 

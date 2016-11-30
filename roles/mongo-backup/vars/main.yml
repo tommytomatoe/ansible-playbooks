@@ -1,0 +1,4 @@
+---
+# Vars for nodejs setup
+nodejs_npm_global_packages: 
+  - pm2

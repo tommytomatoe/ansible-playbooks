@@ -1,0 +1,19 @@
+---
+# Configure nodejs 
+- name: state node symlink 
+  stat: path=/usr/bin/node
+  register: st_node
+
+- name: state nodejs binary 
+  stat: path=/usr/bin/nodejs
+  register: st_nodejs
+
+- name: create nodejs -> node symlink
+  file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+  when: st_node.stat.exists == False and st_nodejs.stat.exists == True
+  become: true
+
+- name: install global npm packages
+  npm: name={{ item }} global=yes
+  with_items: "{{ nodejs_npm_global_packages }}"
+  become: true
