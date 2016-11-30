@@ -1,4 +1,12 @@
-# ansible-playbooks: a collection of Ansible playbooks for provisioning and deploying
+# ansible-playbooks
+a collection of Ansible playbooks for provisioning and deploying
+
+## How to use ansible-playbooks 
+At Right Click Design and Plate.Work, we customize these sample playbooks to quickly provision and deploy web apps for development, staging, and production. 
+
+Typically, we spin up as many DigitalOcean Droplets or AWS Compute units as needed, update the Inventory files, then fire away. The less time on configuring servers and VMs, the more time we have for solving mysteries.
+
+Hope you have fun!
 
 ## Install Ansible on the Control Machine
 Currently Ansible can be run from any machine with Python 2.6 or 2.7 installed (Windows isn’t supported for the control machine).
@@ -71,4 +79,18 @@ ansible-playbook -i staging deploy.yml
 ansible-playbook -i production deploy.yml --ask-vault-pass
 ```
 
-# Have fun!
+## Future updates
+* Provide more examples
+  * framework-specific apps, ie. angular2, react, etc
+* Add more server configuration options
+  * SSL, iptables, etc
+* Add backup playbooks 
+* Add more provisioning playbooks 
+  * nginx, tomcat, etc 
+* Add support for additional platforms
+  * CentOS, Arch Linux, etc 
+
+## Have fun!
+Find us at https://rcd.cool and get in touch at hello@rcd.cool. 
+
+## MIT License
