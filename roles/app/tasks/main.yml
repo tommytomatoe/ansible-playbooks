@@ -39,7 +39,7 @@
     - npm-install
 
 - name: gracefully reload app with pm2 on port {{ nodejs_app_port }}
-  environment: "{{ APP_ENVIRONMENT }}"
+  environment: "{{ APP_ENVIRONMENT | combine({'PORT': '{{ nodejs_app_port }}'}) }}"
   command: pm2 gracefulReload {{ deploy_app_dir }}/{{ deploy_app_executable }} 
            --log-date-format="YYYY-MM-DD HH:mm Z"
            -n {{ app_name }} 
@@ -54,7 +54,7 @@
     - pm2-gracefulReload
 
 - name: start app with pm2 on port {{ nodejs_app_port }}
-  environment: "{{ APP_ENVIRONMENT }}"
+  environment: "{{ APP_ENVIRONMENT | combine({'PORT': '{{ nodejs_app_port }}'}) }}"
   command: pm2 start {{ deploy_app_dir }}/{{ deploy_app_executable }} 
            --log-date-format="YYYY-MM-DD HH:mm Z"
            -n {{ app_name }} 
