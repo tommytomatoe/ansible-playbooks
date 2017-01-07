@@ -2,6 +2,7 @@
 ## Staging secrets
 
 APP_ENVIRONMENT:
+  NODE_ENV: "development"
   SECRET_TOKEN: "1234567890abc"
   ANOTHER_TOKEN: "cba0987654321"
   DB_NAME: "staging_db"
